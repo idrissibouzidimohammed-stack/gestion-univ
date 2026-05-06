@@ -3,63 +3,58 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Absence;
+use App\Models\Etudiant;
+use App\Models\Module;
 use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $absences = Absence::with(['etudiant.user', 'module'])->orderBy('date', 'desc')->paginate(15);
+        return view('admin.absences.index', compact('absences'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $etudiants = Etudiant::with('user')->get();
+        $modules = Module::all();
+        return view('admin.absences.create', compact('etudiants', 'modules'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'etudiant_id' => 'required|exists:etudiants,id',
+            'module_id' => 'required|exists:modules,id',
+            'date' => 'required|date',
+            'justifiee' => 'boolean',
+        ]);
+
+        Absence::create([
+            'etudiant_id' => $request->etudiant_id,
+            'module_id' => $request->module_id,
+            'date' => $request->date,
+            'justifiee' => $request->has('justifiee'),
+        ]);
+
+        return redirect()->route('admin.absences.index')->with('success', 'Absence enregistrée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, Absence $absence)
     {
-        //
+        $absence->update([
+            'justifiee' => $request->has('justifiee'),
+            'justificatif' => $request->justificatif,
+        ]);
+
+        return redirect()->route('admin.absences.index')->with('success', 'Absence mise à jour avec succès.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Absence $absence)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $absence->delete();
+        return redirect()->route('admin.absences.index')->with('success', 'Absence supprimée avec succès.');
     }
 }
