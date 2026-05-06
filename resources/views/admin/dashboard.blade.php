@@ -1,40 +1,42 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Administration</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100">
-    <div class="min-h-screen">
-        <nav class="bg-red-600 text-white px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold">Espace Administration</h1>
-            <div class="flex items-center gap-4">
-                <span>{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="bg-white text-red-600 px-4 py-1 rounded">Déconnexion</button>
-                </form>
-            </div>
-        </nav>
-        <div class="p-6">
-            <h2 class="text-2xl font-bold mb-4">Bienvenue, {{ auth()->user()->name }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h3 class="font-bold text-lg text-red-600">Gestion utilisateurs</h3>
-                    <p class="text-gray-500 mt-2">Gérer étudiants et professeurs</p>
-                </div>
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h3 class="font-bold text-lg text-red-600">Emploi du temps</h3>
-                    <p class="text-gray-500 mt-2">Gérer l'EDT global</p>
-                </div>
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h3 class="font-bold text-lg text-red-600">Demandes</h3>
-                    <p class="text-gray-500 mt-2">Valider les demandes administratives</p>
-                </div>
-            </div>
+@extends('layouts.admin')
+
+@section('title', 'Tableau de bord')
+
+@section('content')
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+            <p class="text-sm text-gray-500">Étudiants</p>
+            <p class="text-3xl font-bold text-blue-600">{{ $totalEtudiants }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
+            <p class="text-sm text-gray-500">Professeurs</p>
+            <p class="text-3xl font-bold text-green-600">{{ $totalProfesseurs }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
+            <p class="text-sm text-gray-500">Modules</p>
+            <p class="text-3xl font-bold text-yellow-600">{{ $totalModules }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-red-500">
+            <p class="text-sm text-gray-500">Demandes en attente</p>
+            <p class="text-3xl font-bold text-red-600">{{ $totalDemandes }}</p>
         </div>
     </div>
-</body>
-</html>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-bold text-gray-700 mb-3">Accès rapides</h3>
+            <div class="space-y-2">
+                <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">👥 Gérer les utilisateurs</a>
+                <a href="{{ route('admin.notes.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">📝 Gérer les notes</a>
+                <a href="{{ route('admin.edt.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">🗓️ Gérer l'emploi du temps</a>
+                <a href="{{ route('admin.demandes.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">📄 Valider les demandes</a>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-bold text-gray-700 mb-3">Informations</h3>
+            <p class="text-sm text-gray-500">Université Privée de Fès</p>
+            <p class="text-sm text-gray-500">Filière : Génie Informatique</p>
+            <p class="text-sm text-gray-500">Année : 2025 / 2026</p>
+        </div>
+    </div>
+@endsection
