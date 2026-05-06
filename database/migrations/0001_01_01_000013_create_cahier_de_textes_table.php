@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('cahier_de_textes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('module_id')->constrained()->onDelete('cascade');
+            $table->foreignId('professeur_id')->constrained()->onDelete('cascade');
+            $table->date('date');
+            $table->time('heure_debut');
+            $table->time('heure_fin');
+            $table->string('objectif');
+            $table->enum('type_seance', ['cours', 'td', 'tp']);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('cahier_de_textes');
