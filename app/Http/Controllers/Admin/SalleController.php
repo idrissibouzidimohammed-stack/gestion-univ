@@ -3,63 +3,56 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Salle;
 use Illuminate\Http\Request;
 
 class SalleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $salles = Salle::paginate(10);
+        return view('admin.salles.index', compact('salles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.salles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'capacite' => 'required|integer|min:1',
+            'type' => 'required|in:cours,td,tp,amphi',
+        ]);
+
+        Salle::create($request->all());
+
+        return redirect()->route('admin.salles.index')->with('success', 'Salle créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Salle $salle)
     {
-        //
+        return view('admin.salles.edit', compact('salle'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Salle $salle)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'capacite' => 'required|integer|min:1',
+            'type' => 'required|in:cours,td,tp,amphi',
+        ]);
+
+        $salle->update($request->all());
+
+        return redirect()->route('admin.salles.index')->with('success', 'Salle modifiée avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Salle $salle)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $salle->delete();
+        return redirect()->route('admin.salles.index')->with('success', 'Salle supprimée avec succès.');
     }
 }
