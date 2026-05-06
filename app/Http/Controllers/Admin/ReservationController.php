@@ -3,63 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reservation;
+use App\Models\Salle;
+use App\Models\Professeur;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $reservations = Reservation::with(['salle', 'professeur.user'])->orderBy('date', 'desc')->paginate(15);
+        return view('admin.reservations.index', compact('reservations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function update(Request $request, Reservation $reservation)
     {
-        //
+        $request->validate([
+            'statut' => 'required|in:validee,refusee',
+        ]);
+
+        $reservation->update(['statut' => $request->statut]);
+
+        return redirect()->route('admin.reservations.index')->with('success', 'Réservation mise à jour.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function destroy(Reservation $reservation)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $reservation->delete();
+        return redirect()->route('admin.reservations.index')->with('success', 'Réservation supprimée.');
     }
 }
