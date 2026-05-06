@@ -3,63 +3,73 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmploiDuTemps;
+use App\Models\Module;
+use App\Models\Salle;
+use App\Models\Groupe;
 use Illuminate\Http\Request;
 
 class EdtController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $edts = EmploiDuTemps::with(['module', 'salle', 'groupe'])->orderBy('jour')->orderBy('heure_debut')->paginate(15);
+        return view('admin.edt.index', compact('edts'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $modules = Module::all();
+        $salles = Salle::all();
+        $groupes = Groupe::all();
+        return view('admin.edt.create', compact('modules', 'salles', 'groupes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'module_id' => 'required|exists:modules,id',
+            'salle_id' => 'required|exists:salles,id',
+            'groupe_id' => 'required|exists:groupes,id',
+            'jour' => 'required|in:lundi,mardi,mercredi,jeudi,vendredi,samedi',
+            'heure_debut' => 'required',
+            'heure_fin' => 'required|after:heure_debut',
+            'type' => 'required|in:cours,td,tp',
+        ]);
+
+        EmploiDuTemps::create($request->all());
+
+        return redirect()->route('admin.edt.index')->with('success', 'Séance ajoutée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(EmploiDuTemps $edt)
     {
-        //
+        $modules = Module::all();
+        $salles = Salle::all();
+        $groupes = Groupe::all();
+        return view('admin.edt.edit', compact('edt', 'modules', 'salles', 'groupes'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, EmploiDuTemps $edt)
     {
-        //
+        $request->validate([
+            'module_id' => 'required|exists:modules,id',
+            'salle_id' => 'required|exists:salles,id',
+            'groupe_id' => 'required|exists:groupes,id',
+            'jour' => 'required|in:lundi,mardi,mercredi,jeudi,vendredi,samedi',
+            'heure_debut' => 'required',
+            'heure_fin' => 'required|after:heure_debut',
+            'type' => 'required|in:cours,td,tp',
+        ]);
+
+        $edt->update($request->all());
+
+        return redirect()->route('admin.edt.index')->with('success', 'Séance modifiée avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(EmploiDuTemps $edt)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $edt->delete();
+        return redirect()->route('admin.edt.index')->with('success', 'Séance supprimée avec succès.');
     }
 }
