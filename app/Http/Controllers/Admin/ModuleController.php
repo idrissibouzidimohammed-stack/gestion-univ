@@ -3,63 +3,66 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Module;
+use App\Models\Professeur;
+use App\Models\Groupe;
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $modules = Module::with(['professeur.user', 'groupe'])->paginate(10);
+        return view('admin.modules.index', compact('modules'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $professeurs = Professeur::with('user')->get();
+        $groupes = Groupe::all();
+        return view('admin.modules.create', compact('professeurs', 'groupes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'code' => 'required|string|unique:modules',
+            'credits' => 'required|integer|min:1',
+            'professeur_id' => 'nullable|exists:professeurs,id',
+            'groupe_id' => 'nullable|exists:groupes,id',
+        ]);
+
+        Module::create($request->all());
+
+        return redirect()->route('admin.modules.index')->with('success', 'Module créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Module $module)
     {
-        //
+        $professeurs = Professeur::with('user')->get();
+        $groupes = Groupe::all();
+        return view('admin.modules.edit', compact('module', 'professeurs', 'groupes'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Module $module)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'code' => 'required|string|unique:modules,code,'.$module->id,
+            'credits' => 'required|integer|min:1',
+            'professeur_id' => 'nullable|exists:professeurs,id',
+            'groupe_id' => 'nullable|exists:groupes,id',
+        ]);
+
+        $module->update($request->all());
+
+        return redirect()->route('admin.modules.index')->with('success', 'Module modifié avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Module $module)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $module->delete();
+        return redirect()->route('admin.modules.index')->with('success', 'Module supprimé avec succès.');
     }
 }
