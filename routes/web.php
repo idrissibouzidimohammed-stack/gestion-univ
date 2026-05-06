@@ -1,20 +1,27 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Etudiant\DashboardController as EtudiantDashboard;
+use App\Http\Controllers\Professeur\DashboardController as ProfesseurDashboard;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Routes Etudiant
+Route::middleware(['auth', 'role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
+    Route::get('/dashboard', [EtudiantDashboard::class, 'index'])->name('dashboard');
+});
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Routes Professeur
+Route::middleware(['auth', 'role:professeur'])->prefix('professeur')->name('professeur.')->group(function () {
+    Route::get('/dashboard', [ProfesseurDashboard::class, 'index'])->name('dashboard');
+});
+
+// Routes Admin
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 });
 
 require __DIR__.'/auth.php';
