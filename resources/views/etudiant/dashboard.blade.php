@@ -1,30 +1,39 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Étudiant</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100">
-    <div class="min-h-screen">
-        <nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold">Espace Étudiant</h1>
-            <div class="flex items-center gap-4">
-                <span>{{ auth()->user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="bg-white text-blue-600 px-4 py-1 rounded">Déconnexion</button>
-                </form>
+@extends('layouts.etudiant')
+
+@section('title', 'Tableau de bord')
+
+@section('content')
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+            <p class="text-sm text-gray-500">Mes notes</p>
+            <p class="text-3xl font-bold text-blue-600">{{ $totalNotes }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
+            <p class="text-sm text-gray-500">Total absences</p>
+            <p class="text-3xl font-bold text-yellow-600">{{ $totalAbsences }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 border-l-4 border-red-500">
+            <p class="text-sm text-gray-500">Absences non justifiées</p>
+            <p class="text-3xl font-bold text-red-600">{{ $absencesNonJustifiees }}</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-bold text-gray-700 mb-3">Accès rapides</h3>
+            <div class="space-y-2">
+                <a href="{{ route('etudiant.notes.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">📝 Consulter mes notes</a>
+                <a href="{{ route('etudiant.absences.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">📅 Voir mes absences</a>
+                <a href="{{ route('etudiant.edt.index') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">🗓️ Mon emploi du temps</a>
+                <a href="{{ route('etudiant.demandes.create') }}" class="block px-4 py-2 bg-gray-100 rounded hover:bg-gray-200">📄 Faire une demande</a>
             </div>
-        </nav>
-        <div class="p-6">
-            <h2 class="text-2xl font-bold mb-4">Bienvenue, {{ auth()->user()->name }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h3 class="font-bold text-lg text-blue-600">Mes Notes</h3>
-                    <p class="text-gray-500 mt-2">Consulter vos notes</p>
-                </div>
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h3 class="font-bold text-lg text-blue-600">Emploi du temps</h3>
-                    <p class="te
+        </div>
+        <div class="bg-white rounded-lg shadow p-4">
+            <h3 class="font-bold text-gray-700 mb-3">Informations</h3>
+            <p class="text-sm text-gray-500">Université Privée de Fès</p>
+            <p class="text-sm text-gray-500">Filière : Génie Informatique</p>
+            <p class="text-sm text-gray-500">Groupe : {{ auth()->user()->etudiant->groupe->nom ?? '-' }}</p>
+            <p class="text-sm text-gray-500">Apogée : {{ auth()->user()->etudiant->apogee ?? '-' }}</p>
+        </div>
+    </div>
+@endsection

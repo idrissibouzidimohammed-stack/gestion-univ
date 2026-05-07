@@ -21,6 +21,10 @@ Route::get('/', function () {
 // Routes Etudiant
 Route::middleware(['auth', 'role:etudiant'])->prefix('etudiant')->name('etudiant.')->group(function () {
     Route::get('/dashboard', [EtudiantDashboard::class, 'index'])->name('dashboard');
+    Route::resource('notes', \App\Http\Controllers\Etudiant\NoteController::class);
+    Route::resource('absences', \App\Http\Controllers\Etudiant\AbsenceController::class);
+    Route::resource('edt', \App\Http\Controllers\Etudiant\EdtController::class);
+    Route::resource('demandes', \App\Http\Controllers\Etudiant\DemandeController::class);
 });
 
 // Routes Professeur
