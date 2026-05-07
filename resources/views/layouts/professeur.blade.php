@@ -10,43 +10,43 @@
     <div class="flex h-screen">
 
         <!-- Sidebar -->
-        <aside class="w-64 bg-green-900 text-white flex flex-col">
-            <div class="px-6 py-5 border-b border-green-700">
-                <h1 class="text-lg font-bold">🎓 UPF Professeur</h1>
-                <p class="text-xs text-green-300 mt-1">{{ auth()->user()->name }}</p>
-            </div>
-            <nav class="flex-1 px-4 py-4 space-y-1">
-                <a href="{{ route('professeur.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.dashboard') ? 'bg-green-700' : '' }}">
-                    <span>🏠</span> Tableau de bord
-                </a>
-                <a href="{{ route('professeur.notes.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.notes.*') ? 'bg-green-700' : '' }}">
-                    <span>📝</span> Saisie des notes
-                </a>
-                <a href="{{ route('professeur.absences.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.absences.*') ? 'bg-green-700' : '' }}">
-                    <span>📅</span> Absences
-                </a>
-                <a href="{{ route('professeur.cahier.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.cahier.*') ? 'bg-green-700' : '' }}">
-                    <span>📖</span> Cahier de textes
-                </a>
-                <a href="{{ route('professeur.edt.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.edt.*') ? 'bg-green-700' : '' }}">
-                    <span>🗓️</span> Emploi du temps
-                </a>
-                <a href="{{ route('professeur.reservations.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.reservations.*') ? 'bg-green-700' : '' }}">
-                    <span>🔑</span> Réservations
-                </a>
-                <a href="{{ route('professeur.demandes.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 {{ request()->routeIs('professeur.demandes.*') ? 'bg-green-700' : '' }}">
-                    <span>📄</span> Demandes
-                </a>
-            </nav>
-            <div class="px-4 py-4 border-t border-green-700">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-green-700 text-red-400">
-                        <span>🚪</span> Déconnexion
-                    </button>
-                </form>
-            </div>
-        </aside>
+        <aside style="width:256px; background-color:#14532d; color:white; display:flex; flex-direction:column; min-height:100vh;">
+    <div style="padding:20px 24px; border-bottom:1px solid #166534;">
+        <h1 style="font-size:18px; font-weight:bold; color:white;">🎓 UPF Professeur</h1>
+        <p style="font-size:12px; color:#86efac; margin-top:4px;">{{ auth()->user()->name }}</p>
+    </div>
+    <nav style="flex:1; padding:16px; display:flex; flex-direction:column; gap:4px;">
+        <a href="{{ route('professeur.dashboard') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.dashboard') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.dashboard') ? '#166534' : 'transparent' }}'">
+            <span>🏠</span> Tableau de bord
+        </a>
+        <a href="{{ route('professeur.notes.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.notes.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.notes.*') ? '#166534' : 'transparent' }}'">
+            <span>📝</span> Saisie des notes
+        </a>
+        <a href="{{ route('professeur.absences.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.absences.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.absences.*') ? '#166534' : 'transparent' }}'">
+            <span>📅</span> Absences
+        </a>
+        <a href="{{ route('professeur.cahier.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.cahier.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.cahier.*') ? '#166534' : 'transparent' }}'">
+            <span>📖</span> Cahier de textes
+        </a>
+        <a href="{{ route('professeur.edt.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.edt.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.edt.*') ? '#166534' : 'transparent' }}'">
+            <span>🗓️</span> Emploi du temps
+        </a>
+        <a href="{{ route('professeur.reservations.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.reservations.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.reservations.*') ? '#166534' : 'transparent' }}'">
+            <span>🔑</span> Réservations
+        </a>
+        <a href="{{ route('professeur.demandes.index') }}" style="display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:white; text-decoration:none; background:{{ request()->routeIs('professeur.demandes.*') ? '#166534' : 'transparent' }};" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='{{ request()->routeIs('professeur.demandes.*') ? '#166534' : 'transparent' }}'">
+            <span>📄</span> Demandes
+        </a>
+    </nav>
+    <div style="padding:16px; border-top:1px solid #166534;">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" style="width:100%; text-align:left; display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:8px; color:#fca5a5; background:transparent; border:none; cursor:pointer;" onmouseover="this.style.background='#166534'" onmouseout="this.style.background='transparent'">
+                <span>🚪</span> Déconnexion
+            </button>
+        </form>
+    </div>
+</aside>
 
         <!-- Main content -->
         <main class="flex-1 overflow-y-auto">
