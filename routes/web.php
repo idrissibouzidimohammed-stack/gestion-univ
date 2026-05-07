@@ -26,6 +26,12 @@ Route::middleware(['auth', 'role:etudiant'])->prefix('etudiant')->name('etudiant
 // Routes Professeur
 Route::middleware(['auth', 'role:professeur'])->prefix('professeur')->name('professeur.')->group(function () {
     Route::get('/dashboard', [ProfesseurDashboard::class, 'index'])->name('dashboard');
+    Route::resource('notes', \App\Http\Controllers\Professeur\NoteController::class);
+    Route::resource('absences', \App\Http\Controllers\Professeur\AbsenceController::class);
+    Route::resource('cahier', \App\Http\Controllers\Professeur\CahierController::class);
+    Route::resource('edt', \App\Http\Controllers\Professeur\EdtController::class);
+    Route::resource('reservations', \App\Http\Controllers\Professeur\ReservationController::class);
+    Route::resource('demandes', \App\Http\Controllers\Professeur\DemandeController::class);
 });
 
 // Routes Admin
